@@ -1,0 +1,6 @@
+Teseus clean source import
+files=534
+python_files=461
+archive_bytes=721912
+archive_sha256=5eea1294bec3afc959d46b72b175af86de32a13cfa32d859d879597db5a73330
+encoding=base64-parts
