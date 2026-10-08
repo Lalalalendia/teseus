@@ -1,0 +1,59 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+[project]
+name = "theseus-mutation-platform"
+version = "1.29.6"
+description = "Theseus mutation testing and recovery control plane"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []
+[project.scripts]
+theseus = "theseus_local.cli:main"
+theseus-worker = "theseus_local.worker_runtime.entrypoint:main"
+test-intelligence-unified = "test_intelligence_unified_v1.cli:main"
+theseus-survivor-lab = "theseus_survivor_lab.cli:main"
+theseus-ui = "theseus_ui.__main__:main"
+[tool.setuptools]
+packages = [
+    "test_intelligence_unified_v1",
+    "theseus_contracts",
+    "gallifrey_mutation",
+    "theseus_local",
+    "theseus_local.worker_runtime",
+    "theseus_knowledge",
+    "theseus_planner",
+    "theseus_statistics",
+    "theseus_performance",
+    "theseus_api",
+    "theseus_ui",
+    "theseus_survivor_lab",
+    "theseus_survivor_adapter",
+]
+[tool.setuptools.package-dir]
+test_intelligence_unified_v1 = "."
+theseus_contracts = "theseus_contracts"
+gallifrey_mutation = "gallifrey_mutation"
+theseus_local = "theseus_local"
+theseus_knowledge = "theseus_knowledge"
+theseus_planner = "theseus_planner"
+theseus_statistics = "theseus_statistics"
+theseus_performance = "theseus_performance"
+theseus_api = "theseus_api"
+theseus_ui = "theseus_ui"
+theseus_survivor_lab = "theseus_survivor_lab"
+theseus_survivor_adapter = "theseus_survivor_adapter"
+[tool.setuptools.package-data]
+theseus_survivor_lab = [
+    "py.typed",
+    "schemas/*.json",
+    "examples/*.json",
+    "examples/*.md",
+    "README.md",
+    "ARCHITECTURE_ISOLATION.md",
+]
+theseus_ui = [
+    "assets/*.html",
+    "assets/*.js",
+    "assets/*.css",
+]

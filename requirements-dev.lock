@@ -1,0 +1,2 @@
+# Development/test dependency lock for the E14 verification lane.
+pytest==9.1.1

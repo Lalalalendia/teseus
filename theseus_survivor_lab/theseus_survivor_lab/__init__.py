@@ -1,0 +1,67 @@
+"""Standalone Theseus E24 Survivor Lab package."""
+
+from .classification import ClassificationDecision, classify_survivor
+from .context import extract_causal_context
+from .contracts import (
+    AnalysisFinding,
+    CausalContext,
+    DependencyEvidence,
+    EnvironmentEvidence,
+    ExecutionEvidence,
+    GenerationSource,
+    MutantEvidence,
+    RepairHypothesis,
+    SelectionEvidence,
+    SourceEvidence,
+    SurvivorAnalysisRequest,
+    SurvivorAnalysisResult,
+    SurvivorCategory,
+    SurvivorClassification,
+    TestEvidence,
+    TestFragment,
+    TestProposal,
+    ValidationPlan,
+    ValidationStep,
+)
+from .providers import (
+    DeterministicTemplateProvider,
+    NullRepairProposalProvider,
+    ProviderRequest,
+    ProviderResponse,
+    ProviderSuggestion,
+    RepairProposalProvider,
+)
+from .service import SurvivorAnalysisService, analyze_request
+
+__all__ = [
+    "AnalysisFinding",
+    "CausalContext",
+    "ClassificationDecision",
+    "DependencyEvidence",
+    "DeterministicTemplateProvider",
+    "EnvironmentEvidence",
+    "ExecutionEvidence",
+    "GenerationSource",
+    "MutantEvidence",
+    "NullRepairProposalProvider",
+    "ProviderRequest",
+    "ProviderResponse",
+    "ProviderSuggestion",
+    "RepairHypothesis",
+    "RepairProposalProvider",
+    "SelectionEvidence",
+    "SourceEvidence",
+    "SurvivorAnalysisRequest",
+    "SurvivorAnalysisResult",
+    "SurvivorAnalysisService",
+    "SurvivorCategory",
+    "SurvivorClassification",
+    "TestEvidence",
+    "TestFragment",
+    "TestProposal",
+    "ValidationPlan",
+    "ValidationStep",
+    "analyze_request",
+    "classify_survivor",
+    "extract_causal_context",
+]

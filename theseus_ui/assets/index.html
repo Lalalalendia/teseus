@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Theseus — кампании</title>
+  <link rel="stylesheet" href="/assets/styles.css">
+  <script src="/assets/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Перейти к содержимому</a>
+  <header class="app-header">
+    <div>
+      <p class="eyebrow">Локальная панель управления Theseus</p>
+      <h1>Кампании</h1>
+    </div>
+    <p id="connection-status" role="status">Загрузка локального состояния…</p>
+  </header>
+  <main id="main" tabindex="-1">
+    <section id="overview-view" aria-labelledby="overview-heading">
+      <div class="section-heading">
+        <div>
+          <h2 id="overview-heading">Обзор кампаний</h2>
+          <p>Выберите проект, запустите или остановите кампанию, восстановите её и просматривайте подтверждённый прогресс.</p>
+        </div>
+        <button id="refresh-overview" type="button">Обновить</button>
+      </div>
+      <div class="dashboard-grid">
+        <article class="panel">
+          <h3>Проекты</h3>
+          <div id="projects-state" class="state-message" role="status">Загрузка проектов…</div>
+          <ul id="project-list" class="entity-list" aria-label="Проекты"></ul>
+        </article>
+        <article class="panel panel-wide">
+          <h3>Кампании</h3>
+          <div id="campaigns-state" class="state-message" role="status">Загрузка кампаний…</div>
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th scope="col">Кампания</th><th scope="col">Статус</th><th scope="col">Версия</th><th scope="col">Прогресс</th><th scope="col">Мутационный балл</th><th scope="col">Последняя активность</th></tr></thead>
+              <tbody id="campaign-table-body"></tbody>
+            </table>
+          </div>
+        </article>
+        <article class="panel panel-wide">
+          <h3>Запуски проектов</h3>
+          <div id="project-runs-state" class="state-message" role="status">Загрузка запусков…</div>
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th scope="col">Запуск</th><th scope="col">Статус</th><th scope="col">Файлы</th><th scope="col">Очередь</th><th scope="col">Ошибки</th><th scope="col">Прогресс мутантов</th><th scope="col">Действия</th></tr></thead>
+              <tbody id="project-run-table-body"></tbody>
+            </table>
+          </div>
+        </article>
+      </div>
+      <article id="project-run-detail-panel" class="panel project-run-detail" hidden>
+        <div class="section-heading">
+          <div><p class="eyebrow">ProjectRun</p><h3>Диагностика запуска проекта</h3><p id="project-run-detail-subtitle"></p></div>
+          <div class="action-row"><button id="refresh-project-run-detail" type="button">Обновить</button><button id="close-project-run-detail" type="button">Закрыть</button></div>
+        </div>
+        <div id="project-run-detail-state" class="state-message" role="status"></div>
+        <div id="project-run-detail-summary" class="project-run-summary-grid" aria-label="Сводка запуска проекта"></div>
+        <div id="project-run-current" class="campaign-context" aria-label="Текущий файл запуска"></div>
+        <details class="disclosure-panel project-run-failures" open>
+          <summary>Причины ошибок <span id="project-run-failure-count" class="count-badge">0</span></summary>
+          <div class="table-scroll"><table class="dense-table"><thead><tr><th scope="col">Стадия</th><th scope="col">Код</th><th scope="col">Файлов</th></tr></thead><tbody id="project-run-failure-groups-body"></tbody></table></div>
+        </details>
+        <details class="disclosure-panel" open>
+          <summary>Файлы <span id="project-run-files-count" class="count-badge">0</span></summary>
+          <div class="table-scroll"><table class="dense-table project-run-files-table"><thead><tr><th scope="col">Файл</th><th scope="col">Статус</th><th scope="col">Стадия сбоя</th><th scope="col">Ошибка</th><th scope="col">Мутанты</th><th scope="col">Кампания</th></tr></thead><tbody id="project-run-files-body"></tbody></table></div>
+          <p id="project-run-files-note" class="section-help"></p>
+        </details>
+        <details class="disclosure-panel" open>
+          <summary>Журнал запуска <span id="project-run-events-count" class="count-badge">0</span></summary>
+          <ol id="project-run-event-list" class="event-list project-run-event-list"></ol>
+        </details>
+      </article>
+      <article class="panel project-panel">
+        <h3>Добавить локальный проект</h3>
+        <p>Зарегистрируйте рабочую копию один раз — кампании и их сохранённое состояние будут доступны после перезапуска интерфейса.</p>
+        <form id="register-project-form">
+          <div class="form-grid">
+            <label>Корень проекта<input name="project_root" required autocomplete="off" placeholder="D:\projects\my-project"></label>
+            <label>Отображаемое имя<input name="display_name" autocomplete="off" placeholder="Мой проект"></label>
+          </div>
+          <button type="submit">Добавить проект</button>
+          <div id="register-project-result" class="state-message" role="status"></div>
+        </form>
+      </article>
+      <article class="panel create-panel">
+        <h3>Запустить проект</h3>
+        <p>Выберите проект в списке выше и запустите полное мутационное тестирование одной кнопкой. Theseus сам использует сохранённый профиль и разложит production-файлы на обычные проверяемые кампании.</p>
+        <p id="project-run-selection" class="notice">Выберите проект для запуска.</p>
+        <form id="project-run-form">
+          <button id="project-run-button" type="submit" disabled>Запустить проект</button>
+          <div id="project-run-result" class="state-message" role="status"></div>
+        </form>
+      </article>
+      <article class="panel create-panel">
+        <h3>Ручная кампания</h3>
+        <p id="launch-authority-note" class="notice">Выберите зарегистрированный проект. Команда «Создать и запустить» запускает отдельный локальный координатор; состояние сохраняется.</p>
+        <p id="project-profile-summary" class="notice">Выберите проект, чтобы использовать сохранённый профиль запуска.</p>
+        <form id="create-campaign-form">
+          <div class="form-grid">
+            <label>Проект<select id="create-project-select" name="project_id" required><option value="">Выберите проект</option></select></label>
+            <label>Путь к исходному файлу<input name="source_path" required autocomplete="off" placeholder="src\package\module.py"></label>
+            <label>Функция<input name="function" autocomplete="off"></label>
+            <label>Область<select name="scope_kind"><option value="file">Файл</option><option value="function">Функция</option><option value="project">Проект</option><option value="git_diff">Изменения Git</option></select></label>
+            <label>Операторы<input name="operators" placeholder="condition_to_not, arithmetic_replace" autocomplete="off"></label>
+          </div>
+          <details>
+            <summary>Расширенные настройки</summary>
+            <p>Пустые поля используют сохранённые значения профиля проекта.</p>
+            <div class="form-grid">
+              <label>Команда тестов<input name="test_command" autocomplete="off" placeholder="Автоматически из профиля проекта"></label>
+              <label>Максимум мутантов<input name="max_mutants" type="number" min="1"></label>
+              <label>Максимум рабочих процессов<input name="max_workers" type="number" min="1"></label>
+              <label>Лимит времени, с<input name="max_seconds" type="number" min="0.1" step="0.1"></label>
+              <label>Лимит времени теста, с<input name="max_test_seconds" type="number" min="0.1" step="0.1"></label>
+              <label>Режим повторного использования<select name="reuse_mode"><option value="">По профилю</option><option value="hint">Подсказка</option><option value="exact">Точный</option><option value="partial">Частичный</option><option value="off">Отключён</option></select></label>
+              <label class="checkbox-label"><input name="no_escalation" type="checkbox"> Отключить эскалацию для этого запуска</label>
+            </div>
+          </details>
+          <button type="submit">Создать и запустить кампанию</button>
+          <div id="create-result" class="state-message" role="status"></div>
+        </form>
+      </article>
+    </section>
+    <section id="detail-view" hidden aria-labelledby="detail-heading">
+      <div class="section-heading">
+        <div>
+          <button id="back-to-overview" class="link-button" type="button">← Назад к кампаниям</button>
+          <h2 id="detail-heading">Детали кампании</h2>
+          <p id="detail-subtitle"></p>
+        </div>
+        <button id="refresh-detail" type="button">Обновить</button>
+      </div>
+      <div class="tab-list" role="tablist" aria-label="Разделы кампании">
+        <button id="campaign-tab" type="button" role="tab" aria-selected="true" aria-controls="campaign-content">Кампания</button>
+        <button id="recovery-tab" type="button" role="tab" aria-selected="false" aria-controls="recovery-content">Восстановление и диагностика</button>
+      </div>
+      <section id="campaign-content" role="tabpanel" aria-labelledby="campaign-tab">
+        <div id="detail-state" class="state-message compact-state" role="status">Выберите кампанию.</div>
+        <div id="campaign-alerts" class="campaign-alerts" aria-live="polite"></div>
+        <div id="campaign-context" class="campaign-context" aria-label="Контекст кампании"></div>
+        <div id="campaign-summary" class="campaign-summary-grid" aria-label="Ключевые показатели кампании"></div>
+        <details id="campaign-technical-details" class="panel disclosure-panel technical-details">
+          <summary>Технические детали <span class="summary-hint">baseline, reuse, activity</span></summary>
+          <div id="campaign-secondary-summary" class="secondary-metric-grid"></div>
+        </details>
+        <article class="panel action-panel">
+          <div class="panel-heading-inline"><div><h3>Действия</h3><p>Команды изменяют состояние текущей кампании.</p></div></div>
+          <div class="action-row"><button data-action="start" type="button" title="Запустить новую попытку текущей кампании">Запустить</button><button data-action="cancel" class="button-danger" type="button" title="Остановить выполняющуюся кампанию">Остановить</button><button data-action="retry" type="button" title="Повторить кампанию после сбоя">Повторить</button><button data-action="resume" type="button" title="Продолжить восстановимую кампанию">Продолжить</button></div>
+          <div id="action-result" class="state-message" role="status"></div>
+        </article>
+        <div class="detail-two-column">
+          <article class="panel progress-panel"><h3>Прогресс</h3><dl id="progress-details" class="compact-definitions"></dl></article>
+          <details class="panel disclosure-panel"><summary>План кампании</summary><dl id="plan-details" class="compact-definitions"></dl></details>
+        </div>
+        <details class="panel disclosure-panel"><summary>Рабочие процессы <span id="workers-count" class="count-badge">0</span></summary><div class="table-scroll"><table><thead><tr><th scope="col">Процесс</th><th scope="col">Статус</th><th scope="col">Шард</th><th scope="col">Завершено</th></tr></thead><tbody id="workers-body"></tbody></table></div></details>
+        <details class="panel disclosure-panel"><summary>Шарды <span id="shards-count" class="count-badge">0</span></summary><div class="table-scroll"><table><thead><tr><th scope="col">Шард</th><th scope="col">Статус</th><th scope="col">Попытка</th><th scope="col">Прогресс</th></tr></thead><tbody id="shards-body"></tbody></table></div></details>
+        <details class="panel disclosure-panel" open><summary>Результаты мутантов <span id="executions-count" class="count-badge">0</span></summary><p class="section-help">Показываются только компактные подтверждённые поля; тяжёлые артефакты остаются вне browser hot path.</p><div id="execution-counts" class="secondary-metric-grid"></div><div class="table-scroll"><table class="dense-table"><thead><tr><th scope="col">Мутант</th><th scope="col">Результат</th><th scope="col" data-contract-label="Killer">Тест-убийца</th><th scope="col" data-contract-label="Test plan">План тестов</th><th scope="col" data-contract-label="Executed / reused">Выполнен / переиспользован</th><th scope="col" data-contract-label="Timing">Время</th><th scope="col" data-contract-label="Evidence quality">Качество подтверждения</th><th scope="col">Восстановление</th></tr></thead><tbody id="executions-body"></tbody></table></div></details>
+        <details class="panel disclosure-panel"><summary>Артефакты <span id="artifacts-count" class="count-badge">0</span></summary><div class="table-scroll"><table><thead><tr><th scope="col">Логический ключ</th><th scope="col">Роль</th><th scope="col">Размер</th><th scope="col">Создан</th></tr></thead><tbody id="artifacts-body"></tbody></table></div></details>
+        <details class="panel disclosure-panel"><summary>Последние события <span id="events-count" class="count-badge">0</span></summary><div id="events-state" class="state-message" role="status">Поток событий приостановлен.</div><ol id="event-list" class="event-list"></ol></details>
+      </section>
+      <section id="recovery-content" role="tabpanel" aria-labelledby="recovery-tab" hidden>
+        <div class="section-heading compact-heading"><div><h3>Восстановление и диагностика</h3><p>Подтверждённые данные восстановления из локального публичного API.</p></div><button id="refresh-recovery" type="button">Обновить диагностику</button></div>
+        <div id="recovery-state" class="state-message" role="status">Диагностика восстановления ещё не загружена.</div>
+        <article class="panel">
+          <h3>Действия восстановления</h3>
+          <p>Эти операции могут изменить сохранённое состояние кампании и требуют подтверждения.</p>
+          <div class="action-row"><button data-recovery-action="reconcile" type="button">Сверить</button><button data-recovery-action="recover" type="button">Восстановить / продолжить</button></div>
+          <div id="recovery-action-result" class="state-message" role="status"></div>
+          <dl id="recovery-action-receipt"></dl>
+        </article>
+        <article class="panel"><h3>Сводка восстановления</h3><div id="recovery-summary" class="metric-grid"></div><h4>Блокирующие причины</h4><ul id="recovery-blockers" class="blocker-list"></ul></article>
+        <article class="panel"><h3>Аренды</h3><div id="leases-state" class="state-message" role="status"></div><div class="table-scroll"><table><thead><tr><th scope="col">Шард</th><th scope="col">Процесс</th><th scope="col">Попытка</th><th scope="col">Статус аренды</th><th scope="col">Возраст сигнала активности</th><th scope="col">Истечение</th><th scope="col">Застой / зависание</th><th scope="col">Версия</th></tr></thead><tbody id="leases-body"></tbody></table></div></article>
+        <article class="panel"><h3>Рабочие процессы восстановления</h3><div id="recovery-workers-state" class="state-message" role="status"></div><div class="table-scroll"><table><thead><tr><th scope="col">Процесс</th><th scope="col">Жизненный цикл</th><th scope="col">Текущий шард</th><th scope="col">Последний сигнал активности</th><th scope="col">Осиротел</th><th scope="col">Данные о процессе</th></tr></thead><tbody id="recovery-workers-body"></tbody></table></div></article>
+        <article class="panel"><h3>Очередь доставки</h3><div id="spool-summary" class="metric-grid"></div><div id="spool-state" class="state-message" role="status"></div><div class="table-scroll"><table><thead><tr><th scope="col">Доставка</th><th scope="col">Кампания</th><th scope="col">Шард</th><th scope="col">Выполнение</th><th scope="col">Попытка</th><th scope="col">Статус</th><th scope="col">Записано</th></tr></thead><tbody id="spool-body"></tbody></table></div></article>
+        <article class="panel paged-panel"><h3>Карантин</h3><div id="quarantine-state" class="state-message" role="status"></div><div class="table-scroll"><table><thead><tr><th scope="col">Причина</th><th scope="col">Кампания</th><th scope="col">Шард</th><th scope="col">Выполнение</th><th scope="col">Попытка</th><th scope="col">Записано</th><th scope="col">Подтверждение</th></tr></thead><tbody id="quarantine-body"></tbody></table></div><button id="load-more-quarantine" type="button" hidden>Загрузить следующую страницу карантина</button></article>
+        <article class="panel paged-panel"><h3>Реестр артефактов</h3><div id="artifact-registry-state" class="state-message" role="status"></div><div class="table-scroll"><table><thead><tr><th scope="col">Логический ключ</th><th scope="col">ID артефакта</th><th scope="col">SHA-256</th><th scope="col">Размер</th><th scope="col">Регистрация</th><th scope="col">Финализация</th></tr></thead><tbody id="artifact-registry-body"></tbody></table></div><button id="load-more-artifacts" type="button" hidden>Загрузить следующую страницу артефактов</button></article>
+        <article class="panel paged-panel"><h3>Статистика тестов</h3><div id="test-statistics-state" class="state-message" role="status"></div><div class="table-scroll"><table><thead><tr><th scope="col">Тест</th><th scope="col">Длительность</th><th scope="col">Успешно</th><th scope="col">Ошибка</th><th scope="col">Сбой</th><th scope="col">Тайм-аут</th><th scope="col">Повтор</th><th scope="col">Восстановление</th><th scope="col">Переходы нестабильности</th></tr></thead><tbody id="test-statistics-body"></tbody></table></div><button id="load-more-statistics" type="button" hidden>Загрузить следующую страницу статистики</button></article>
+        <article class="panel paged-panel"><h3>Подтверждения повторного использования</h3><div id="reuse-evidence-state" class="state-message" role="status"></div><div class="table-scroll"><table><thead><tr><th scope="col">Мутант</th><th scope="col">Тип повторного использования</th><th scope="col">Разрешено</th><th scope="col">Нужен аудит</th><th scope="col">Качество подтверждения</th><th scope="col">Блокеры</th><th scope="col">Исходное выполнение</th><th scope="col">Исходное событие</th></tr></thead><tbody id="reuse-evidence-body"></tbody></table></div><button id="load-more-reuse" type="button" hidden>Загрузить следующую страницу подтверждений</button></article>
+      </section>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,86 @@
+name: post-pr63-gates
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  windows-control-plane:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -r requirements-dev.lock
+      - name: Run Windows durable control-plane gate
+        run: >-
+          python -m pytest -q
+          tests/test_ci_runner.py
+          tests/test_control_plane_determinism.py
+          tests/test_remote_protocol_adversarial.py
+          tests/test_persisted_schema_fail_closed.py
+          tests/test_distributed_scheduler_races.py
+          tests/test_artifact_integrity_adversarial.py
+          tests/test_remote_worker_lifecycle_adversarial.py
+          tests/test_network_transport_e2e.py
+          tests/test_network_artifacts.py
+          tests/test_network_control_plane_adversarial.py
+          tests/test_network_cli.py
+
+  regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -r requirements-dev.lock
+      - run: python -m pytest -q -n auto --dist=loadscope
+
+  mutation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -r requirements-dev.lock
+      - run: python -m test_intelligence_unified_v1 ci . --lane mutation --reports-dir ci-reports --result-file ci-reports/mutation.json
+
+  scale:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -r requirements-dev.lock
+      - run: python -m test_intelligence_unified_v1 ci . --lane scale --reports-dir ci-reports --result-file ci-reports/scale.json
+
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -r requirements-dev.lock
+      - run: python -m pip wheel . --no-deps --no-build-isolation --wheel-dir dist
+      - name: Run clean-wheel acceptance
+        shell: bash
+        run: |
+          wheel=$(find dist -maxdepth 1 -name '*.whl' -print -quit)
+          THESEUS_RELEASE_WHEEL="$wheel" python -m test_intelligence_unified_v1 ci . --lane release --reports-dir ci-reports --result-file ci-reports/release.json
+
+  soak:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -r requirements-dev.lock
+      - run: python -m test_intelligence_unified_v1 ci . --lane soak --reports-dir ci-reports --result-file ci-reports/soak.json

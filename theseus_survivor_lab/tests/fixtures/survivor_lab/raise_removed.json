@@ -1,0 +1,9 @@
+{
+  "expected": {"primary_category": "real_test_gap", "hypothesis_kinds": ["exception_contract"]},
+  "schema_version": 1, "request_id": "fixture-raise-removed", "project_id": "fixture-project", "revision": null,
+  "mutant": {"mutant_id": "m-raise-removed", "operator": "raise_to_pass", "operator_version": "1", "source_path": "src/decision.py", "function_id": "decision.decide", "class_name": null, "line_no": 2, "column_no": 8, "original": "raise ValueError('bad')", "replacement": "pass", "diff": null, "status": "survived"},
+  "source": {"source_path": "src/decision.py", "source_sha256": "6ce39f597bae99e10b98a3857528e2763c7517f58171cb1d3ee797c43022b708", "source_text": "def decide(x):\n    if x:\n        raise ValueError('bad')\n    return 1\n", "function_source": null, "function_start_line": 1, "function_end_line": 4},
+  "selection": {"selected_tests": ["tests/test_decision.py::test_invalid"], "runtime_location_reached": true, "oracle_observed": true, "assertions_observed": true, "observed_effects_changed": true},
+  "executions": [{"execution_id": "exec-raise-removed", "level": "selected", "status": "survived", "exit_code": 0, "timed_out": false, "infrastructure_failure": false, "restore_verified": true, "selected_tests": ["tests/test_decision.py::test_invalid"], "observed_tests": ["tests/test_decision.py::test_invalid"], "output_excerpt": null}],
+  "related_tests": [], "related_dependencies": [], "environment": null, "requested_modes": ["classify", "propose"]
+}

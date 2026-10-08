@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://theseus.invalid/survivor-lab/survivor-analysis-result.v1.schema.json",
+  "title": "Theseus SurvivorAnalysisResult v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "request_id", "analysis_id", "proposal_set_id", "result_id", "classification", "confidence", "findings", "hypotheses", "proposals", "validation_plan", "provider", "blockers", "warnings"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "request_id": {"$ref": "#/$defs/nonEmptyString"},
+    "analysis_id": {"$ref": "#/$defs/nonEmptyString"},
+    "proposal_set_id": {"$ref": "#/$defs/nonEmptyString"},
+    "result_id": {"$ref": "#/$defs/nonEmptyString"},
+    "classification": {"$ref": "#/$defs/classification"},
+    "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+    "findings": {"type": "array", "items": {"$ref": "#/$defs/finding"}},
+    "hypotheses": {"type": "array", "items": {"$ref": "#/$defs/hypothesis"}},
+    "proposals": {"type": "array", "items": {"$ref": "#/$defs/proposal"}},
+    "validation_plan": {"$ref": "#/$defs/validationPlan"},
+    "provider": {"$ref": "#/$defs/provider"},
+    "blockers": {"type": "array", "maxItems": 20, "items": {"$ref": "#/$defs/nonEmptyString"}},
+    "warnings": {"type": "array", "maxItems": 20, "items": {"$ref": "#/$defs/nonEmptyString"}}
+  },
+  "$defs": {
+    "nonEmptyString": {"type": "string", "minLength": 1, "maxLength": 16000},
+    "evidenceIds": {"type": "array", "items": {"$ref": "#/$defs/nonEmptyString"}, "uniqueItems": true},
+    "classification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["category", "reason", "confidence", "evidence_ids", "secondary_categories"],
+      "properties": {
+        "category": {"enum": ["real_test_gap", "weak_oracle", "selection_escape", "equivalent_suspected", "unreachable_code", "environment_dependent", "test_data_gap", "assertion_too_broad", "infrastructure_ambiguity", "timeout_ambiguity", "insufficient_evidence"]},
+        "reason": {"$ref": "#/$defs/nonEmptyString"},
+        "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+        "evidence_ids": {"$ref": "#/$defs/evidenceIds"},
+        "secondary_categories": {"type": "array", "uniqueItems": true, "items": {"enum": ["real_test_gap", "weak_oracle", "selection_escape", "equivalent_suspected", "unreachable_code", "environment_dependent", "test_data_gap", "assertion_too_broad", "infrastructure_ambiguity", "timeout_ambiguity", "insufficient_evidence"]}}
+      }
+    },
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["finding_id", "kind", "title", "description", "evidence_ids", "severity"],
+      "properties": {
+        "finding_id": {"$ref": "#/$defs/nonEmptyString"},
+        "kind": {"$ref": "#/$defs/nonEmptyString"},
+        "title": {"$ref": "#/$defs/nonEmptyString"},
+        "description": {"$ref": "#/$defs/nonEmptyString"},
+        "evidence_ids": {"$ref": "#/$defs/evidenceIds"},
+        "severity": {"enum": ["info", "warning", "blocker"]}
+      }
+    },
+    "hypothesis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hypothesis_id", "kind", "title", "explanation", "target_behavior", "suggested_inputs", "suggested_assertions", "related_tests", "confidence", "evidence_ids"],
+      "properties": {
+        "hypothesis_id": {"$ref": "#/$defs/nonEmptyString"},
+        "kind": {"$ref": "#/$defs/nonEmptyString"},
+        "title": {"$ref": "#/$defs/nonEmptyString"},
+        "explanation": {"$ref": "#/$defs/nonEmptyString"},
+        "target_behavior": {"$ref": "#/$defs/nonEmptyString"},
+        "suggested_inputs": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/nonEmptyString"}},
+        "suggested_assertions": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/nonEmptyString"}},
+        "related_tests": {"type": "array", "maxItems": 100, "items": {"type": "string", "minLength": 1, "maxLength": 1000}},
+        "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+        "evidence_ids": {"$ref": "#/$defs/evidenceIds"}
+      }
+    },
+    "proposal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["proposal_id", "target_test_file", "target_test_nodeid", "proposed_test_name", "arrangement", "action", "assertions", "rationale", "expected_original_outcome", "expected_mutant_outcome", "imports_needed", "fixtures_needed", "generated_code", "generation_source"],
+      "properties": {
+        "proposal_id": {"$ref": "#/$defs/nonEmptyString"},
+        "target_test_file": {"type": ["string", "null"], "maxLength": 16000},
+        "target_test_nodeid": {"type": ["string", "null"], "maxLength": 1000},
+        "proposed_test_name": {"$ref": "#/$defs/nonEmptyString"},
+        "arrangement": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/nonEmptyString"}},
+        "action": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/nonEmptyString"}},
+        "assertions": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/nonEmptyString"}},
+        "rationale": {"$ref": "#/$defs/nonEmptyString"},
+        "expected_original_outcome": {"$ref": "#/$defs/nonEmptyString"},
+        "expected_mutant_outcome": {"$ref": "#/$defs/nonEmptyString"},
+        "imports_needed": {"type": "array", "items": {"$ref": "#/$defs/nonEmptyString"}},
+        "fixtures_needed": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/nonEmptyString"}},
+        "generated_code": {"type": ["string", "null"], "maxLength": 65536},
+        "generation_source": {"enum": ["deterministic_template", "external_provider", "manual_adapter"]}
+      }
+    },
+    "validationStep": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["step_id", "title", "command_hint", "purpose"],
+      "properties": {
+        "step_id": {"$ref": "#/$defs/nonEmptyString"},
+        "title": {"$ref": "#/$defs/nonEmptyString"},
+        "command_hint": {"$ref": "#/$defs/nonEmptyString"},
+        "purpose": {"$ref": "#/$defs/nonEmptyString"}
+      }
+    },
+    "validationPlan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["original_checks", "mutant_checks", "regression_checks", "stability_checks"],
+      "properties": {
+        "original_checks": {"type": "array", "items": {"$ref": "#/$defs/validationStep"}},
+        "mutant_checks": {"type": "array", "items": {"$ref": "#/$defs/validationStep"}},
+        "regression_checks": {"type": "array", "items": {"$ref": "#/$defs/validationStep"}},
+        "stability_checks": {"type": "array", "items": {"$ref": "#/$defs/validationStep"}}
+      }
+    },
+    "provider": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version", "deterministic", "invoked", "request_sha256", "response_sha256"],
+      "properties": {
+        "name": {"$ref": "#/$defs/nonEmptyString"},
+        "version": {"$ref": "#/$defs/nonEmptyString"},
+        "deterministic": {"type": "boolean"},
+        "invoked": {"type": "boolean"},
+        "request_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-fA-F]{64}$"},
+        "response_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-fA-F]{64}$"}
+      }
+    }
+  }
+}

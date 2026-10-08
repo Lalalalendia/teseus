@@ -1,0 +1,9 @@
+{
+  "expected": {"primary_category": "environment_dependent", "finding_kinds": ["environment_dependent"]},
+  "schema_version": 1, "request_id": "fixture-environment", "project_id": "fixture-project", "revision": null,
+  "mutant": {"mutant_id": "m-environment", "operator": "literal_true_to_false", "operator_version": "1", "source_path": "src/decision.py", "function_id": "decision.decide", "class_name": null, "line_no": 3, "column_no": 15, "original": "True", "replacement": "False", "diff": null, "status": "survived"},
+  "source": {"source_path": "src/decision.py", "source_sha256": "a77e8c6f33f7fa1f179d114be712c1970f4b17a89edf5a542962206409aa44d0", "source_text": "def decide(x):\n    if x > 3:\n        return True\n    return False\n", "function_source": null, "function_start_line": 1, "function_end_line": 4},
+  "selection": {"selected_tests": ["tests/test_decision.py::test_high"], "runtime_location_reached": true, "oracle_observed": true, "assertions_observed": true, "observed_effects_changed": true},
+  "executions": [{"execution_id": "exec-environment", "level": "full", "status": "survived", "exit_code": 0, "timed_out": false, "infrastructure_failure": false, "restore_verified": true, "selected_tests": ["tests/test_decision.py::test_high"], "observed_tests": ["tests/test_decision.py::test_high"], "output_excerpt": null}],
+  "related_tests": [], "related_dependencies": [], "environment": {"platform": "windows", "python_version": "3.14", "markers": ["locale-varies"], "differences": ["platform differs between observations"], "stable": false}, "requested_modes": ["classify"]
+}

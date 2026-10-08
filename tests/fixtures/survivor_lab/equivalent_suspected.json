@@ -1,0 +1,9 @@
+{
+  "expected": {"primary_category": "equivalent_suspected", "finding_kinds": ["equivalent_suspected"]},
+  "schema_version": 1, "request_id": "fixture-equivalent", "project_id": "fixture-project", "revision": null,
+  "mutant": {"mutant_id": "m-equivalent", "operator": "literal_one_to_true", "operator_version": "1", "source_path": "src/decision.py", "function_id": "decision.decide", "class_name": null, "line_no": 3, "column_no": 15, "original": "1", "replacement": "True", "diff": null, "status": "survived"},
+  "source": {"source_path": "src/decision.py", "source_sha256": "2c05265e31858f841e4acaa874edfc4f2d8ef05b775e9ebe5a1865882bbf8aa0", "source_text": "def decide(x):\n    if x > 3:\n        return 1\n    return False\n", "function_source": null, "function_start_line": 1, "function_end_line": 4},
+  "selection": {"selected_tests": ["tests/test_decision.py::test_high"], "runtime_location_reached": true, "equivalent_observation": true, "reachable_paths_proven": true, "observed_effects_changed": false, "oracle_observed": true, "assertions_observed": true},
+  "executions": [{"execution_id": "exec-equivalent", "level": "full", "status": "survived", "exit_code": 0, "timed_out": false, "infrastructure_failure": false, "restore_verified": true, "selected_tests": ["tests/test_decision.py::test_high"], "observed_tests": ["tests/test_decision.py::test_high"], "output_excerpt": null}],
+  "related_tests": [], "related_dependencies": [], "environment": null, "requested_modes": ["classify"]
+}

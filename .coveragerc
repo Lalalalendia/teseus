@@ -1,0 +1,17 @@
+[run]
+branch = True
+source =
+    test_intelligence_unified_v1
+    theseus_contracts
+    gallifrey_mutation
+    theseus_local
+    theseus_knowledge
+omit =
+    */tests/*
+    */worker_smoke_project/*
+    */build/*
+    */install*/*
+
+[report]
+precision = 1
+fail_under = 78

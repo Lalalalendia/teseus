@@ -1,0 +1,9 @@
+{
+  "expected": {"primary_category": "test_data_gap", "finding_kinds": ["test_data_gap"]},
+  "schema_version": 1, "request_id": "fixture-truth-table-gap", "project_id": "fixture-project", "revision": null,
+  "mutant": {"mutant_id": "m-truth-table", "operator": "boolean_and_to_or", "operator_version": "1", "source_path": "src/decision.py", "function_id": "decision.decide", "class_name": null, "line_no": 2, "column_no": 11, "original": "a and b", "replacement": "a or b", "diff": null, "status": "survived"},
+  "source": {"source_path": "src/decision.py", "source_sha256": "facce9c1c28363cbfd8d753a379126ea33a06de3acf23352bfe8264ef0abbf6e", "source_text": "def decide(a, b):\n    return a and b\n", "function_source": null, "function_start_line": 1, "function_end_line": 2},
+  "selection": {"selected_tests": ["tests/test_decision.py::test_both_true"], "runtime_location_reached": true, "boundary_values_observed": null, "truth_table_observed": false, "oracle_observed": true, "assertions_observed": true, "observed_effects_changed": true},
+  "executions": [{"execution_id": "exec-truth-table", "level": "selected", "status": "survived", "exit_code": 0, "timed_out": false, "infrastructure_failure": false, "restore_verified": true, "selected_tests": ["tests/test_decision.py::test_both_true"], "observed_tests": ["tests/test_decision.py::test_both_true"], "output_excerpt": null}],
+  "related_tests": [], "related_dependencies": [], "environment": null, "requested_modes": ["classify", "propose"]
+}

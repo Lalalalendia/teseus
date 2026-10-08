@@ -1,0 +1,9 @@
+{
+  "expected": {"primary_category": "unreachable_code", "finding_kinds": ["unreachable_code"]},
+  "schema_version": 1, "request_id": "fixture-unreachable", "project_id": "fixture-project", "revision": null,
+  "mutant": {"mutant_id": "m-unreachable", "operator": "literal_true_to_false", "operator_version": "1", "source_path": "src/decision.py", "function_id": "decision.decide", "class_name": null, "line_no": 3, "column_no": 15, "original": "True", "replacement": "False", "diff": null, "status": "survived"},
+  "source": {"source_path": "src/decision.py", "source_sha256": "a77e8c6f33f7fa1f179d114be712c1970f4b17a89edf5a542962206409aa44d0", "source_text": "def decide(x):\n    if x > 3:\n        return True\n    return False\n", "function_source": null, "function_start_line": 1, "function_end_line": 4},
+  "selection": {"selected_tests": ["tests/test_decision.py::test_low"], "runtime_location_reached": false, "static_reachability": "unreachable", "oracle_observed": null, "assertions_observed": null},
+  "executions": [{"execution_id": "exec-unreachable", "level": "full", "status": "survived", "exit_code": 0, "timed_out": false, "infrastructure_failure": false, "restore_verified": true, "selected_tests": ["tests/test_decision.py::test_low"], "observed_tests": ["tests/test_decision.py::test_low"], "output_excerpt": null}],
+  "related_tests": [], "related_dependencies": [], "environment": null, "requested_modes": ["classify"]
+}

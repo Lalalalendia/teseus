@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "theseus-survivor-lab"
+version = "0.1.0"
+description = "Standalone offline survivor analysis core for Theseus E24"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+theseus-survivor-lab = "theseus_survivor_lab.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["theseus_survivor_lab*"]
+
+[tool.setuptools.package-data]
+theseus_survivor_lab = ["py.typed"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

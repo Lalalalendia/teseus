@@ -1,0 +1,23 @@
+diff --git a/tests/test_e00_baseline_snapshots.py b/tests/test_e00_baseline_snapshots.py
+--- a/tests/test_e00_baseline_snapshots.py
++++ b/tests/test_e00_baseline_snapshots.py
+@@ -157,9 +157,17 @@ def _cli_commands() -> list[str]:
+ 
+ 
+ def test_e00_fixture_matrix_is_complete_and_dynamic_collection_is_visible(tmp_path: Path) -> None:
+-    # Keep all planned v1.26 provenance and collection fixtures present and deterministic.
++    # Keep all planned v1.26 executable fixture projects present and deterministic.
+     snapshot = _load_snapshot()
+-    fixture_names = sorted(path.name for path in FIXTURES_ROOT.iterdir() if path.is_dir())
++    fixture_names = sorted(
++        path.name
++        for path in FIXTURES_ROOT.iterdir()
++        if path.is_dir()
++        and (
++            (path / "pyproject.toml").is_file()
++            or any(path.rglob("*.py"))
++        )
++    )
+     assert fixture_names == snapshot["fixtures"]
+     assert (FIXTURES_ROOT / "golden_project" / "app.py").is_file()
+     assert (FIXTURES_ROOT / "editable_install_project" / "src" / "editable_fixture" / "core.py").is_file()

@@ -1,0 +1,8 @@
+{
+  "expected": {"primary_category": "insufficient_evidence", "blockers": ["semantic_evidence_incomplete"]},
+  "schema_version": 1, "request_id": "fixture-insufficient", "project_id": "fixture-project", "revision": null,
+  "mutant": {"mutant_id": "m-insufficient", "operator": "unknown_operator", "operator_version": "1", "source_path": "src/decision.py", "function_id": null, "class_name": null, "line_no": 2, "column_no": 0, "original": "x", "replacement": "y", "diff": null, "status": "survived"},
+  "source": {"source_path": "src/decision.py", "source_sha256": "a77e8c6f33f7fa1f179d114be712c1970f4b17a89edf5a542962206409aa44d0", "source_text": "def decide(x):\n    if x > 3:\n        return True\n    return False\n", "function_source": null, "function_start_line": 1, "function_end_line": 4},
+  "selection": {"selected_tests": [], "runtime_location_reached": null, "boundary_values_observed": null, "truth_table_observed": null, "oracle_observed": null, "assertions_observed": null},
+  "executions": [], "related_tests": [], "related_dependencies": [], "environment": null, "requested_modes": ["classify"]
+}

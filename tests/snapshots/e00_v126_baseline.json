@@ -1,0 +1,241 @@
+{
+  "cli": {
+    "commands": [
+      "benchmark",
+      "benchmark-history",
+      "ci",
+      "ci-matrix",
+      "doctor",
+      "gc",
+      "impact-migrate",
+      "index",
+      "inspect",
+      "mutate",
+      "recover",
+      "resume",
+      "run",
+      "select",
+      "stats",
+      "test",
+      "trace",
+      "trace-merge",
+      "validate"
+    ],
+    "version": "1.29.6",
+    "help_sha256": "60de5689f7cc837759049e93b254402456b2c77a300e02a962607965daa713ab"
+  },
+  "benchmark": {
+    "benchmark_version": "v1.26",
+    "schema_version": 2,
+    "subprocess_passed": true,
+    "workload_count": 11,
+    "workload_order": [
+      "nodeid_validation",
+      "mutation_generation_full",
+      "mutation_generation_limited",
+      "mutant_prepare_and_compile",
+      "line_selection",
+      "stats_ingestion",
+      "stats_health_summary",
+      "index_cold_build",
+      "index_warm_build",
+      "worker_stats_merge",
+      "small_e2e_campaign"
+    ],
+    "small_e2e_campaign": {
+      "status": "complete",
+      "mutants": 1,
+      "results": 1,
+      "mutation_score": 1.0
+    }
+  },
+  "engine": {
+    "index_schema_version": 3,
+    "report_schema_version": 2,
+    "runner_version": "unified-v1.26",
+    "selection_algorithm_version": "selection-v5",
+    "selection_schema_version": 3,
+    "version": "1.29.5"
+  },
+  "fixtures": [
+    "dynamic_pytest_project",
+    "editable_install_project",
+    "flaky_project",
+    "golden_project",
+    "namespace_project",
+    "src_layout_project"
+  ],
+  "golden_campaign": {
+    "function_id": "app.py::classify",
+    "metrics": {
+      "counts": {
+        "killed": 1
+      },
+      "mutation_score": 1.0,
+      "operator_stats": {
+        "condition_to_not": {
+          "counts": {
+            "killed": 1
+          },
+          "mutation_score": 1.0,
+          "operator_version": "m3",
+          "total_mutants": 1
+        }
+      },
+      "selection_escapes": 0,
+      "total_mutants": 1
+    },
+    "mutant_ids": [
+      "m3:condition_to_not:L2:C8:ccaadac969af"
+    ],
+    "result_contract": {
+      "level": "L1",
+      "level_exit_code": 1,
+      "mutant": {
+        "column_no": 8,
+        "line_no": 2,
+        "mutant_id": "m3:condition_to_not:L2:C8:ccaadac969af",
+        "mutation": "condition_to_not",
+        "operator_version": "m3",
+        "original": "value > 0",
+        "replacement": "not (value > 0)"
+      },
+      "restore_verified": true,
+      "selection_source": "explicit-command"
+    },
+    "result_statuses": [
+      "killed"
+    ],
+    "runner_version": "unified-v1.26",
+    "schema_version": 2,
+    "source_sha256": "be957e96fe8e703a2a9719fe1a1c3e6b8a20ac63ebf2124eb3d2369fa82b5ca2",
+    "source_path": "app.py",
+    "status": "complete"
+  },
+  "index": {
+    "files": [
+      "app.py",
+      "test_app.py"
+    ],
+    "functions": [
+      "app.py::classify",
+      "test_app.py::test_classify_positive"
+    ],
+    "sqlite": {
+      "tables": {
+        "files": {
+          "columns": [
+            "rel_path",
+            "size",
+            "mtime_ns",
+            "sha256",
+            "parse_status",
+            "parse_error"
+          ],
+          "indexes": [
+            "sqlite_autoindex_files_1"
+          ]
+        },
+        "functions": {
+          "columns": [
+            "function_id",
+            "rel_path",
+            "qualname",
+            "name",
+            "class_name",
+            "start_line",
+            "end_line",
+            "is_method",
+            "is_async",
+            "risk_score"
+          ],
+          "indexes": [
+            "ix_functions_file",
+            "sqlite_autoindex_functions_1"
+          ]
+        },
+        "metadata": {
+          "columns": [
+            "key",
+            "value"
+          ],
+          "indexes": [
+            "sqlite_autoindex_metadata_1"
+          ]
+        },
+        "tests": {
+          "columns": [
+            "nodeid",
+            "rel_path",
+            "name",
+            "class_name",
+            "start_line",
+            "end_line"
+          ],
+          "indexes": [
+            "ix_tests_file",
+            "sqlite_autoindex_tests_1"
+          ]
+        }
+      },
+      "metadata_keys": [
+        "created_at",
+        "index_version",
+        "parse_errors",
+        "project_root",
+        "schema_version",
+        "summary"
+      ]
+    },
+    "summary": {
+      "files": 2,
+      "functions": 2,
+      "parse_errors": 0,
+      "tests": 1
+    },
+    "tests": [
+      "test_app.py::test_classify_positive"
+    ],
+    "schema_version": 3
+  },
+  "mutation_operator_catalog": [
+    "true_to_false",
+    "false_to_true",
+    "none_to_empty_string",
+    "eq_to_ne",
+    "ne_to_eq",
+    "lt_to_le",
+    "le_to_lt",
+    "gt_to_ge",
+    "ge_to_gt",
+    "plus_to_minus",
+    "minus_to_plus",
+    "and_to_or",
+    "or_to_and",
+    "return_value_to_none",
+    "condition_to_not",
+    "remove_standalone_call",
+    "raise_to_pass",
+    "empty_list_to_none",
+    "empty_dict_to_sentinel",
+    "await_to_expression"
+  ],
+  "selection": {
+    "algorithm_version": "selection-v5",
+    "files": [
+      "test_app.py"
+    ],
+    "function_id": "app.py::classify",
+    "level_name": "L1",
+    "level_reason": "static-name",
+    "nodeids": [
+      "test_app.py::test_classify_positive"
+    ],
+    "schema_version": 3,
+    "selected_tests": [
+      "test_app.py::test_classify_positive"
+    ],
+    "source_path": "app.py",
+    "source_sha256": "be957e96fe8e703a2a9719fe1a1c3e6b8a20ac63ebf2124eb3d2369fa82b5ca2"
+  }
+}

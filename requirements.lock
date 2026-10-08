@@ -1,0 +1,2 @@
+# Theseus runtime is intentionally stdlib-only; this file locks that contract.
+# Python >= 3.11

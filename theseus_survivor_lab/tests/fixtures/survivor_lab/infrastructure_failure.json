@@ -1,0 +1,9 @@
+{
+  "expected": {"primary_category": "infrastructure_ambiguity", "blockers": ["execution_integrity_unproven"]},
+  "schema_version": 1, "request_id": "fixture-infrastructure", "project_id": "fixture-project", "revision": null,
+  "mutant": {"mutant_id": "m-infrastructure", "operator": "literal_true_to_false", "operator_version": "1", "source_path": "src/decision.py", "function_id": "decision.decide", "class_name": null, "line_no": 3, "column_no": 15, "original": "True", "replacement": "False", "diff": null, "status": "survived"},
+  "source": {"source_path": "src/decision.py", "source_sha256": "a77e8c6f33f7fa1f179d114be712c1970f4b17a89edf5a542962206409aa44d0", "source_text": "def decide(x):\n    if x > 3:\n        return True\n    return False\n", "function_source": null, "function_start_line": 1, "function_end_line": 4},
+  "selection": {"selected_tests": ["tests/test_decision.py::test_high"], "runtime_location_reached": true},
+  "executions": [{"execution_id": "exec-infrastructure", "level": "selected", "status": "error", "exit_code": 1, "timed_out": false, "infrastructure_failure": true, "restore_verified": false, "selected_tests": ["tests/test_decision.py::test_high"], "observed_tests": [], "output_excerpt": "worker crashed"}],
+  "related_tests": [], "related_dependencies": [], "environment": null, "requested_modes": ["classify"]
+}
